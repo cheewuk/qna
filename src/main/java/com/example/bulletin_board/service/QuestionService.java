@@ -1,9 +1,11 @@
 package com.example.bulletin_board.service;
 
 import com.example.bulletin_board.domain.Question;
+import com.example.bulletin_board.domain.UserEntity;
 import com.example.bulletin_board.dto.QuestionRequestDto;
 import com.example.bulletin_board.dto.QuestionResponseDto;
 import com.example.bulletin_board.repository.QuestionRepository;
+import com.example.bulletin_board.repository.UserRepository;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final UserRepository userRepository;
 
     //모든 질문들을 조회
     @Transactional(readOnly = true)
@@ -33,6 +36,9 @@ public class QuestionService {
                 .map(question -> new QuestionResponseDto(question))
                 .collect(Collectors.toList());
 
+
+
+
         return questionResponseDtos;
     }
 
@@ -41,11 +47,17 @@ public class QuestionService {
     @Transactional
     public QuestionResponseDto createQuestion(QuestionRequestDto questionRequestDto) {
 
+        //DTO로부터 userId를 가져와 UserEntity를 조회
+        UserEntity authorEntity = userRepository.findById(questionRequestDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("해당 ID의 사용자를 찾을수없습니다."));
+
+
+
         //QuestionRequestDto로부터 Question 엔티티를 생성
         Question newQuestion = Question.builder()
                 .questionTitle(questionRequestDto.getQuestionTitle())
                 .questionContent(questionRequestDto.getQuestionContent())
-                .author(questionRequestDto.getAuthor())
+                .userEntity(authorEntity) //조회한 UserEntity 객체로 작성자 설정
                 .build();
 
         //createdAt와 updatedAt은 자동생성됨
