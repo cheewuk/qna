@@ -5,6 +5,7 @@ import com.example.bulletin_board.dto.UserRequestDto;
 import com.example.bulletin_board.dto.UserResponseDto;
 import com.example.bulletin_board.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //새로운 사용자 등록
     @Transactional
@@ -28,7 +30,8 @@ public class UserService {
             throw new IllegalArgumentException("이미 사용중인 닉네임입니다.");
         }
 
-        //비밀번호 암호화 (17일차에 PasswordEncoder로 구현예정)
+        //비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(userRequestDto.getUserPassword());
 
 
         //User 엔티티 생성
@@ -39,6 +42,8 @@ public class UserService {
                 .build();
 
         UserEntity savedUser = userRepository.save(newUser);
+
+        //로그인 로직은 18일차에 PasswordEncoder를 사용하여 비밀번호 검증 예쩡
 
         return new UserResponseDto(savedUser);
     }
