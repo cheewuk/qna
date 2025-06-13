@@ -28,7 +28,7 @@ public class UserEntity {
     private String username;
 
     //회원 가입시 사용할 비밀번호
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 72)
     private String userPassword;
 
     //회원 가입시 사용할 닉네임

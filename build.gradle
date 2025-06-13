@@ -28,6 +28,16 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// JJWT API (Core)
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
+	// JJWT Implementation (Runtime) - 실행 시 필요
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
+	// JJWT Jackson (JSON Processor) - JSON 처리를 위해 Jackson 사용 시
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5' // 또는 jjwt-gson
+
+
+
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.projectlombok:lombok'
